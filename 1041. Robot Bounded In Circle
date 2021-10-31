@@ -1,0 +1,57 @@
+//https://leetcode.com/problems/robot-bounded-in-circle/
+
+class Solution {
+public:
+    
+    char getNext(char face, char dir)
+    {
+        if(face == 'N')
+        {
+            if(dir == 'L') return 'W';
+            if(dir == 'R') return 'E';
+        }
+        
+        if(face == 'W')
+        {
+            if(dir == 'L') return 'S';
+            if(dir == 'R') return 'N';
+        }
+        
+        if(face == 'S')
+        {
+            if(dir == 'L') return 'E';
+            if(dir == 'R') return 'W';
+        }
+        
+        if(face == 'E')
+        {
+            if(dir == 'L') return 'N';
+            if(dir == 'R') return 'S';
+        }
+        return false;
+    }
+    
+    bool isRobotBounded(string instructions) {
+        
+        int n = (int)instructions.size();
+        int x = 0, y = 0;
+        char cur = 'N';
+        for(int i = 0; i < n; i++)
+        {
+            if(instructions[i] == 'G')
+            {
+                if(cur == 'N') y += 1;
+                if(cur == 'S') y -= 1;
+                if(cur == 'E') x += 1;
+                if(cur == 'W') x -= 1;
+            }
+            else
+            {
+                cur = getNext(cur, instructions[i]);
+            }
+        }
+        
+        if(cur == 'N' && abs(x) + abs(y) != 0) return false;
+        return true;
+    }
+};
