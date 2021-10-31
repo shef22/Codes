@@ -1,0 +1,30 @@
+//https://leetcode.com/contest/biweekly-contest-59/problems/maximum-matrix-sum/
+
+class Solution {
+public:
+    long long maxMatrixSum(vector<vector<int>>& matrix) {
+        
+        int n = (int)matrix.size();
+        int m = (int)matrix[0].size();
+        
+        long long smallest = 1e10;
+        long long sum = 0;
+        int tot_neg = 0;
+        for(int i = 0; i < n; i++)
+        {
+            for(int j = 0; j < m; j++)
+            {
+                if(matrix[i][j] < 0) tot_neg++;
+                smallest = min(smallest, (long long)abs(matrix[i][j]));
+                sum += abs(matrix[i][j]);
+            }
+        }
+        
+        if(tot_neg % 2) 
+        {
+            sum -= 2 * smallest;
+        }
+        return sum;
+        
+    }
+};
