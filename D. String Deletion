@@ -1,0 +1,107 @@
+//https://codeforces.com/contest/1430/problem/D
+
+#include <bits/stdc++.h>
+#include <ext/pb_ds/tree_policy.hpp>
+#include <ext/pb_ds/assoc_container.hpp>
+
+#define ff first
+#define ss second
+#define ll long long
+#define double long double
+#define pb push_back
+#define pll pair<ll, ll>
+#define pii pair<int, int>
+
+#define sz(x) (int)x.size()
+#define range(x) x.begin(),x.end()
+#define rep(i,k,n) for(int i=k;i<n;i++)
+#define show(x) cout<<#x<<" :: "<<x<<'\n';
+#define iosbase ios_base::sync_with_stdio(false); cin.tie(NULL);
+#define show2(x,y) cout<<#x<<" :: "<<x<<"\t"<<#y<<" :: "<<y<<'\n';
+#define show3(x,y,z) cout<<#x<<" :: "<<x<<"\t"<<#y<<" :: "<<y<<"\t"<<#z<<" :: "<<z<<'\n';
+#define oset tree<int , null_type, less<int> , rb_tree_tag, tree_order_statistics_node_update>
+
+using namespace std;
+using namespace __gnu_pbds;
+
+const ll inf = 1e18;
+const ll N = 2000005;
+const ll mm = 1e9 + 7;
+
+int main()
+{
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    #endif
+    iosbase;
+
+    int test;
+    cin>>test;
+    for(int t = 1; t <= test; t++)
+    {
+        int n;
+        cin>>n;
+        string s;
+        cin>>s;
+
+        map<pii, int> pairs;
+        set<pii> st;
+        set<pii> ones;
+        rep(i,0,n)
+        {
+            int cnt = 1;
+            int beg = i;
+            while(i + 1 < n && s[i + 1] == s[i])
+            {
+                i++;
+                cnt++;
+            }
+            pairs[{beg, i}] = cnt;
+            if(cnt > 1) st.insert({beg, i});
+            else ones.insert({beg, i});
+        }
+        int ans = 0;
+        rep(i,0,n)
+        {
+            int beg = i;
+            while(i + 1 < n && s[i + 1] == s[i])
+            {
+                i++;
+            }
+            pii cur_pair = {beg, i};
+            int count = pairs[cur_pair];
+            //show2(beg, count);
+            if(count > 1)
+            {
+                ans++;
+                st.erase(cur_pair);
+                pairs[cur_pair] = 0;
+                continue;
+            }
+
+            if(!st.empty())
+            {
+                ones.erase(ones.find(cur_pair));
+                auto it = *st.begin();
+                int cur_count = pairs[it];
+                //show(cur_count);
+                pairs[it] = cur_count - 1;
+                if(cur_count == 2)
+                {
+                    st.erase(st.find(it));
+                    ones.insert(it);
+                }
+                ans++;
+                continue;
+            }
+
+            int left = sz(ones);
+            ans += (left + 1) / 2;
+            break;
+
+        }
+        cout<<ans<<'\n';
+    }
+    return 0;
+}
